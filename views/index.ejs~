@@ -1,0 +1,14 @@
+<div class="main">
+<div id="wrapper">
+     <div id="inner">
+       	   <form action="/start" method="post" class="well">
+	    <label>Pseudo</label>
+	    <input type="text" name="pseudo" class="span3" placeholder="" x-webkit-speech/>
+	    <label>Create/open a Posts with the name</label>
+	    <input type="text" name="space" class="span3" placeholder="" x-webkit-speech/>
+	    <input type="submit" class="btn">Go</button>
+	   </form>
+     </div>
+ </div>
+</div>
+

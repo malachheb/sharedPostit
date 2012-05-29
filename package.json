@@ -1,0 +1,16 @@
+{
+  "name": "SharedPostit",
+   "version": "0.0.1",
+   "private": true,
+    "dependencies": {
+      "express-session-mongo": "0.0.1",
+      "express": "2.5.9",
+      "ejs": ">= 0.0.1",
+      "mongoose": "2.6.0",
+      "socket.io" : "0.8.7",
+      "connect" : "2.3.0"
+  },
+  "engine": {  
+    "node": ">=0.6"  
+  } 
+}

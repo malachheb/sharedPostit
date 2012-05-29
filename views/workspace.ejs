@@ -1,0 +1,83 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+      <div class="usercontenu well">
+	<div id="myuser">
+      	  <div id="myswatchbox" class="myswatchboxhoverable">
+            <div id="myswatch" style="background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 227, 143); background-position: initial initial; background-repeat: initial initial; "></div>
+	  </div>
+          <div id="myusernameform">
+	    <div id="username"><%= user_pseudo %> </div>
+	  </div>
+	</div>
+      </div>	 
+    </div>
+    <div class="span10">
+      <div id="board" class="contenu well">
+      <% for(var i=0; i<posts.length; i++) { %>
+         <div class="post-it" id="post" style="<%= posts[i].position %>" rel="<%= posts[i]._id %>">
+   	  <h1><%= posts[i].title %></h1>
+          <ul>
+	    <li>* <%= posts[i].content %></li>
+    	  </ul>
+	</div>
+       <% } %>
+      	
+      </div>
+    </div>
+  </div>
+</div>
+
+<ul id="boardMenu" class="contextMenu">
+    <li class="add">
+        <a href="#add">Add Post-it</a>
+    </li>
+    <li class="quit separator">
+        <a href="#quit">Quit</a>
+    </li>
+</ul>
+
+
+<ul id="postMenu" class="contextMenu">
+    <li class="edit" id="edit">
+        <a href="#edit">Edit</a>
+    </li>
+    <li class="delete">
+        <a href="#delete">Delete</a>
+    </li>
+    <li class="quit separator">
+        <a href="#quit">Quit</a>
+    </li>
+</ul>
+
+
+<div class="modal hide" id="newpostModal">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <h3>New Postit</h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" id="newpost">
+       <fieldset>
+         <div class="control-group">
+          <label class="control-label" for="post-title">Title</label>
+          <div class="controls">
+           <input type="text" class="input-xlarge" name="title" id="post-title"/>
+           <p class="help-block">The subject of the post-it</p>
+          </div>
+         </div>
+	 <div class="control-group">
+          <label class="control-label" for="post-content">content</label>
+          <div class="controls">
+           <textarea class="input-xlarge" id="textarea" rows="3" name="content"  id="post-content"></textarea> 
+           <p class="help-block">The content of the post it</p>
+          </div>
+         </div>
+       </fieldset>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn">Close</a>
+    <input type="submit" id="newpostbtn"class="post new btn btn-primary" />
+  </div>
+  </form>
+</div>

@@ -1,0 +1,40 @@
+
+
+$(document).ready(function() {
+    var socket = io.connect('http://localhost:3000');
+    var post_actions = new PostActions();
+
+     $("#board").contextMenu({
+     	menu: "boardMenu"
+     },
+     function(action, el, pos) {
+	 switch(action){
+	 case 'add':
+	        $('#newpostModal').modal('show');
+	     break;
+	 case 'delete':
+	     alert ('delete');
+	     break;
+	 }		     
+     });
+
+    post_actions.init(socket);
+    post_actions.contextMenu_post();
+    post_actions.drag_post();
+    
+  
+    socket.on('create post', function (data) {
+	console.log("i should create a post div "+ data.content);
+	//socket.emit('my other event', { my: 'data' });
+    });
+
+   
+    socket.on('news', function (data) {
+	console.log(data.hello);
+	socket.emit('my other event', { my: 'data' });
+    });
+        
+});
+
+
+
