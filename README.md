@@ -18,11 +18,12 @@ ejs - the client side
 
 Install [node](http://nodejs.org), [npm](http://npmjs.org) and [Mongodb](http://www.mongodb.org/).
 Install the node modules when you clone this directory.
+	
 	npm install
 
 Because we have the package.json it will automatically installs the dependant npm modules.
 
-Playing the game
+Starting
 ----------------
 
     $ node app.js
