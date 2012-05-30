@@ -59,11 +59,13 @@ require('./controllers/user')(app);
 
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    app_port = 3000;
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
+    app_port	= 18217;
 });
 
 app.listen(app_port);
