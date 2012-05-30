@@ -22,7 +22,8 @@ var app_version	= "0.0.1";
 var app_port	= 3000;
 
 var app 	= express.createServer();
-var db		= mongoose.connect("mongodb://" + db_host + "/" + db_name);
+var db          = mongoose.connect("mongodb://root:cout123@ds033097.mongolab.com:33097/postit");
+//var db		= mongoose.connect("mongodb://" + db_host + "/" + db_name);
 
 var app = module.exports = express.createServer();
 
