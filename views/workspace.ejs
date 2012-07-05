@@ -1,15 +1,19 @@
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span2">
-      <div class="usercontenu well">
+      <div class="usercontenu well" id="userContent">
+
+       <% for(var i=0; i<users.length; i++) { %>
 	<div id="myuser">
       	  <div id="myswatchbox" class="myswatchboxhoverable">
             <div id="myswatch" style="background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 227, 143); background-position: initial initial; background-repeat: initial initial; "></div>
 	  </div>
           <div id="myusernameform">
-	    <div id="username"><%= user_pseudo %> </div>
+	    <div id="username"><%= users[i].pseudo %> </div>
 	  </div>
 	</div>
+       <% } %>	
+
       </div>	 
     </div>
     <div class="span10">
@@ -32,9 +36,6 @@
     <li class="add">
         <a href="#add">Add Post-it</a>
     </li>
-    <li class="quit separator">
-        <a href="#quit">Quit</a>
-    </li>
 </ul>
 
 
@@ -44,9 +45,6 @@
     </li>
     <li class="delete">
         <a href="#delete">Delete</a>
-    </li>
-    <li class="quit separator">
-        <a href="#quit">Quit</a>
     </li>
 </ul>
 

@@ -11,7 +11,25 @@ function PostActions()
 	    $('#newpostModal').modal('hide');
 	    return false;
 	});
+
+	$('#go').live("click", function() {
+	    me.start_session();
+	    $.ajax({
+                url: '/start',
+                type: 'POST',
+                data: $('form#start').serialize(),
+                success: function(data) {
+	     	    $('body').html(data);
+                },
+	     	error: function() {
+	     	    console.log('process error');
+	     	}
+            });
+	    
+	});
     }
+
+    PostActions
     
     PostActions.prototype.create_post_div = function (data) {
 	var me = this;
@@ -23,6 +41,19 @@ function PostActions()
 	    '</div>';
 	$('div#board').append(html_post);
 	me.drag_post();
+    }
+
+    PostActions.prototype.create_user_div = function (data){
+	var me = this;
+	html_user =   '	<div id="myuser">'+
+	    '<div id="myswatchbox" class="myswatchboxhoverable">'+
+            '<div id="myswatch" style="background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 227, 143); background-position: initial initial; background-repeat: initial initial; "></div>'+
+	    '</div>'+
+	    '<div id="myusernameform">'+
+	    '<div id="username">'+data.pseudo+'</div>'+
+	    '</div>'+
+	    '</div>';
+	    $('div#userContent').append(html_user);
     }
 
 
@@ -64,6 +95,25 @@ function PostActions()
 	    }
 	});
 	
+    }
+
+    PostActions.prototype.start_session = function()
+    {
+	var me = this;
+	$.ajax({
+            url: "/new",
+            type: "POST",
+	    data: $("#start").serialize(),
+	    success: function(data) {
+//		$('#start').submit();
+		me.socket.emit('new user', data);
+		console.log("new user success"+ data);
+	    },
+	    error: function() {
+		console.log('process error');
+		return false;
+	    }
+	});
     }
 
 

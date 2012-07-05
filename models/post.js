@@ -8,8 +8,8 @@ var Post = new Schema({
     content            : String,
     position           : {type : String, default : "position: relative;"},
     user               : String,
-    workspace          : String,
-    created_at		: {type : Date, default : Date.now}
+    workspace         : String,
+    created_at	       : {type : Date, default : Date.now}
 });
 
 

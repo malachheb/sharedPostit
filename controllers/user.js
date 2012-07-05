@@ -5,9 +5,8 @@ var Workspace   = mongoose.model("Workspace");
 
 module.exports = function(app) {
     app.get("/", index);
-    app.get("/users", users);
     app.post("/start", start);
-    app.get("/new", new_user);
+    app.post("/new", new_session);
     app.post("/post/new", new_post);
     app.put("/post/edit/:id", edit_post);
     app.del("/post/delete/:id", delete_post);
@@ -24,41 +23,21 @@ function index(req, res) {
 }
 
 function start(req, res) {
-    // var user = new User();
-    // user.pseudo = req.body.pseudo;
-    // user.save();
-    // var workspace = new Workspace();
-    // workspace.name = req.body.space;
-    // workspace.save();
-    // console.log("the user "+ req.body.pseudo + " is logged in the worksapce " + req.body.space);
-    req.session.user = req.body.pseudo;
-    req.session.workspace = req.body.space;
-    Post.find({}, function(error, posts){
-	res.render('workspace', {
-    	    title : "Workspace",
-	    user_pseudo  : req.body.pseudo,
-	    posts : posts
+    Post.find({workspace : req.session.workspace}, function(error, posts){
+	User.find({workspace : req.session.workspace}, function(error, users){
+	    res.render('workspace', {
+		layout: false,
+    		title : "Workspace",
+		users  : users,
+		posts : posts
+	    });
 	});
     });
-    
-    
 }
 
-function users(req, res) {
-    User.find({}, function(error, users){
-	res.render('users', {
-	    title : "users",
-	    users: users
-	});
-    });
- }
 
 function new_post(req, res)
 {
-    console.log("current user: "+req.session.user);
-    console.log("current workspace: "+req.session.workspace);
-    console.log(req.body.title);
-    console.log(req.body.content);
     var post = new Post();
     post.title= req.body.title;
     post.content= req.body.content;
@@ -66,65 +45,76 @@ function new_post(req, res)
     post.workspace = req.session.workspace;
     post.save();
     res.send(post);
-    // res.writeHead(200, {"Content-Type": "text/plain"});
-    // res.write("user created succefully");
-    // res.end();
-    
 }
 
 function edit_post(req, res)
 {
-    var post_id = req.params.id
-    console.log(post_id);
-    console.log(req.body.position);
-
+    var post_id = req.params.id ;
     Post.findOne({_id : req.params.id}, function(error, post){
 	if(error) {
 	    res.send("no post found", 404);
 	} else {
 	    post.position = req.body.position;
 	    post.save();
+	    console.log("Edit the post: "+post.title);
 	    res.send(post);
 	}
     });
-        
-    // var post = new Post();
-    // post.title= req.body.title;
-    // post.content= req.body.content;
-    // post.user = req.session.user;
-    // post.workspace = req.session.workspace;
-   // post.save();
-   // res.send(post);
-    //res.contentType('application/json');  
-    //res.writeHead(200);
-   // res.json(JSON.stringify(post));
-    //res.end();
-    // res.writeHead(200, {"Content-Type": "text/plain"});
-    // res.write("user created succefully");
-    
 }
 
 function delete_post(req, res)
 {
-    console.log(req.params.id);
     Post.findOne({_id : req.params.id}, function(error, post){
 	if(error) {
 	    res.send("no post found", 404);
 	} else {
 	    post.remove();
+	    console.log("Remove Post: "+ post.title);
 	    res.send(post);
 	}
     });
-		
 }
 
-function new_user(req, res) {
-    var user = new User();
-    user.mail="lachheb@gmail.com";			
-    user.name= "mehrez"
-    user.prename= "lachheb"
-    user.save();
-    res.writeHead(200, {"Content-Type": "text/plain"});
-    res.write("user created succefully");
-    res.end();
+function new_session(req, res) 
+{
+    console.log("the user "+ req.body.pseudo + " is logged in the worksapce " + req.body.space);
+  
+    Workspace.findOne({name : req.body.space}, function(error, space){
+    	if(error || space == null) {
+    	    var workspace = new Workspace();
+    	    workspace.name = req.body.space;
+    	    workspace.save();
+	    console.log("Workspace created: "+ workspace.name);
+    	    req.session.workspace = req.body.space;
+    	}
+	else {
+	    req.session.workspace = req.body.space;
+	}
+    });
+    
+//    Create user if is not exist
+    User.findOne({pseudo : req.body.pseudo}, function(error, user){
+    	if(error || user == null) {
+    	    var myuser = new User();
+    	    myuser.pseudo = req.body.pseudo;
+	    myuser.workspace = req.session.workspace;
+	    myuser.status = "connected";
+    	    req.session.user = req.body.pseudo;
+    	    myuser.save(function (err) {
+    		if(err){
+    		    console.log("error when created user: "+myuser.pseudo);
+    		}
+    	    });
+    	    console.log("User created: "+myuser.pseudo);
+    	    res.send(myuser);
+    	}
+    	else {
+	    user.workspace = req.session.workspace;
+	    user.status = "connected";
+	    user.save();
+	    req.session.user = req.body.pseudo;
+    	    res.send(user);
+    	}
+    });
+    
 }
