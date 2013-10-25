@@ -19,7 +19,7 @@ var ObjectId	= Schema.ObjectId;
 var db_host	= "127.0.0.1";
 var db_name	= "postit";
 var app_version	= "0.0.1";
-var app_port	= 3000;
+var app_port	= 7000;
 
 var app 	= express.createServer();
 //var db          = mongoose.connect("mongodb://root:cout123@ds033097.mongolab.com:33097/postit");
@@ -59,7 +59,7 @@ require('./controllers/user')(app);
 
 app.configure('development', function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-    app_port = 3000;
+    app_port = 5000;
 });
 
 app.configure('production', function(){
@@ -67,8 +67,10 @@ app.configure('production', function(){
     app_port	= 18217;
 });
 
-app.listen(app_port);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+//app.listen(app_port);
+app.listen(app_port, function() {
+    console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+});
 
 io.sockets.on('connection', function (socket) {
 
@@ -81,8 +83,7 @@ io.sockets.on('connection', function (socket) {
 	socket.set('pseudo', data.pseudo);
    	socket.join(data.workspace);
 	socket.broadcast.to(data.workspace).emit('new user', data);
-//	io.sockets.in(data.workspace).emit('new user', data);
-	
+	//	io.sockets.in(data.workspace).emit('new user', data);
     });
 
     socket.on('new post', function (data) {

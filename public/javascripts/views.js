@@ -1,29 +1,40 @@
 $(document).ready(function() {
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('http://localhost:5000');
     var post_actions = new PostActions();
 
-     $("#board").contextMenu({
-     	menu: "boardMenu"
-     },
-     function(action, el, pos) {
-	 switch(action){
-	 case 'add':
-	        $('#newpostModal').modal('show');
-	     break;
-	 case 'delete':
-	     alert ('delete');
-	     break;
-	 }		     
-     });
-
-    post_actions.init(socket);
-    post_actions.contextMenu_post();
-    post_actions.drag_post();
+    	$('#go').live("click", function() {
+	    post_actions.start_session();
+	    $.ajax({
+                url: '/start',
+                type: 'POST',
+                data: $('form#start').serialize(),
+                success: function(data) {
+		    $('body').html(data);
+		    $("#board").contextMenu({
+     			menu: "boardMenu"
+		    },function(action, el, pos) {
+			switch(action){
+			case 'add':
+			    $('#newpostModal').modal('show');
+			    break;
+			case 'delete':
+			    alert ('delete');
+			    break;
+			}		     
+		    });
+		    post_actions.init(socket);
+		    post_actions.contextMenu_post();
+		    post_actions.drag_post();
+                },
+	     	error: function() {
+	     	    console.log('process error');
+	     	}
+            });
+	    
+	});
     
-     socket.on('new user', function (data) {
-	 
-	// console.log("new users connects");
-	 post_actions.create_user_div(data);
+    socket.on('new user', function (data) {
+	post_actions.create_user_div(data);
     });
 
     socket.on('create post', function (data) {

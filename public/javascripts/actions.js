@@ -1,5 +1,3 @@
-
-
 function PostActions()
 {
     var socket = null;
@@ -7,26 +5,13 @@ function PostActions()
 	var me = this;
 	me.socket = mysocket;
 	$('#newpost').submit(function() {
+	    alert("ok");
 	    me.create_post();
 	    $('#newpostModal').modal('hide');
 	    return false;
 	});
 
-	$('#go').live("click", function() {
-	    me.start_session();
-	    $.ajax({
-                url: '/start',
-                type: 'POST',
-                data: $('form#start').serialize(),
-                success: function(data) {
-	     	    $('body').html(data);
-                },
-	     	error: function() {
-	     	    console.log('process error');
-	     	}
-            });
-	    
-	});
+
     }
 
     PostActions
