@@ -1,0 +1,25 @@
+default: &default
+    port: 5000
+    db_host: "127.0.0.1"
+    db_name: "postit"
+    db_user: ""
+    db_passwd: ""
+    app_version: "0.0.1"
+
+development:
+  <<: *default
+
+test:
+    port: 5001
+
+production: &production
+    port: 5000
+    db_host: "127.0.0.1"
+    db_name: "postit"
+    db_user: ""
+    db_passwd: ""
+    app_version: "0.0.1"
+
+staging:
+    <<: *production
+

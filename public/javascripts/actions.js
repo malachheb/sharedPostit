@@ -5,16 +5,18 @@ function PostActions()
 	var me = this;
 	me.socket = mysocket;
 	$('#newpost').submit(function() {
-	    alert("ok");
 	    me.create_post();
 	    $('#newpostModal').modal('hide');
 	    return false;
 	});
-
+	$('#newuser').submit(function() {
+	    me.create_user();
+	    $('#newuserModal').modal('hide');
+	    return false;
+	});
 
     }
 
-    PostActions
     
     PostActions.prototype.create_post_div = function (data) {
 	var me = this;
@@ -61,6 +63,25 @@ function PostActions()
 	
     }
     
+    PostActions.prototype.create_user = function()
+    {
+	var me = this;
+	$.ajax({
+            url: "/users/new",
+            type: "POST",
+	    data: $("#newuser").serialize(),
+	    success: function(data) {
+		me.socket.emit('new user', data);
+		console.log('process sucess');
+	    },
+	    error: function() {
+		console.log('process error');
+	    }
+	});
+
+    }
+
+
     PostActions.prototype.create_post = function()
     {
 	var me = this;
@@ -69,7 +90,7 @@ function PostActions()
             type: "POST",
 	    data: $("#newpost").serialize(),
 	    success: function(data) {
-		me.create_post_div(data); 
+		//me.create_post_div(data); 
 		me.contextMenu_post();
 		me.socket.emit('new post', data);
 		console.log(data.user);
@@ -90,9 +111,9 @@ function PostActions()
             type: "POST",
 	    data: $("#start").serialize(),
 	    success: function(data) {
-//		$('#start').submit();
-		me.socket.emit('new user', data);
-		console.log("new user success"+ data);
+		//me.socket.emit('new user', data);
+		//console.log("new user success"+ data);
+		me.redirect_to_workspace(data['workspace']);
 	    },
 	    error: function() {
 		console.log('process error');
@@ -154,6 +175,12 @@ function PostActions()
 	});
 
     }
+
     
+    PostActions.prototype.redirect_to_workspace = function(id)
+    {
+	window.location = 'http://localhost:5000/'+id ; 
+    }
+
 
 }
