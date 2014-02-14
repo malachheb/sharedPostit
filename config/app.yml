@@ -14,12 +14,12 @@ test:
 
 production: &production
     port: 5000
-    db_host: "127.0.0.1"
+    db_host: "ds027479.mongolab.com:27479"
     db_name: "postit"
-    db_user: ""
-    db_passwd: ""
+    db_user: "root"
+    db_passwd: "postit123"
     app_version: "0.0.1"
-
+    
 staging:
     <<: *production
 

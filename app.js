@@ -8,7 +8,9 @@ var config      = require('konfig')()
 var Schema	= mongoose.Schema;
 var ObjectId	= Schema.ObjectId;
 var app 	= express.createServer();
-var db		= mongoose.connect("mongodb://" + config.app.db_host + "/" + config.app.db_name);
+var db		= mongoose.connect("mongodb://" +config.app.db_user+":"+config.app.db_passwd+"@"+config.app.db_host + "/" + config.app.db_name);
+var MongoStore = require('connect-mongo')(express);
+//mongodb://<dbuser>:<dbpassword>@ds027479.mongolab.com:27479/postit
 
 var io = require('socket.io').listen(app)
 io.set('log level', 1);
@@ -19,17 +21,21 @@ app.configure(function(){
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser());
-    app.use(express.session({ secret: 'your secret here' }));
+    //app.use(express.session({ secret: 'your secret here' }));
+    app.use(express.session({
+	secret: "changeme",
+	store: new MongoStore({
+	    db: config.app.db_name
+	})
+    }));
     app.use(app.router);
     app.use(express.static(__dirname + '/public'));
 });
-
 
 mongoose.model("User", require("./models/user").User);
 mongoose.model("Post", require("./models/post").Post);
 mongoose.model("Workspace", require("./models/workspace").Workspace);
 require('./controllers/user')(app);
-
 
 app.listen(config.app.port, function() {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

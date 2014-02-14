@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    var socket = io.connect('http://localhost:5000');
+    alert(window.location.protocol+"//"+window.location.host)
+    var socket = io.connect(window.location.protocol+"//"+window.location.host);
     var post_actions = new PostActions();
     post_actions.init(socket);
     post_actions.contextMenu_post();
